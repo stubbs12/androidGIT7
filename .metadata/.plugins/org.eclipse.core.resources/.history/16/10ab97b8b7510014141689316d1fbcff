@@ -1,0 +1,89 @@
+package seankelly.androidmap3;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import android.support.v7.app.ActionBarActivity;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+
+
+
+public class MainActivity extends ActionBarActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    
+    public void searchAddress(View v)
+    {
+    	/*
+    	EditText input = (EditText) findViewById(R.id.enterAddress);
+    	String address = input.getText().toString();
+    	String [] addressChunks = address.split("[ ,]+");
+    	Uri.Builder builder = new Uri.Builder();
+    	
+    	https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=API_KEY
+    	
+    		 https://www.myawesomesite.com/turtles/types?type=1&sort=relevance#section-name
+    			 builder.scheme("https").authority("www.myawesomesite.com").appendPath("turtles").appendPath("types").appendQueryParameter("type", "1").appendQueryParameter("sort", "relevance").fragment("section-name");
+    	builder.scheme("https").authority("maps.googleapis.com/maps/api/geocode/json").appendQueryParameter("address", "1").appendQueryParameter("sort", "relevance").fragment("section-name");
+
+    	String myUrl = builder.build().toString();*/
+    	
+    	EditText input = (EditText) findViewById(R.id.enterAddress);
+    	String address = input.getText().toString();
+    	String [] addressChunks = address.split("[ ]+");
+    	String addressQuery= "https://maps.googleapis.com/maps/api/geocode/json?";
+    	addressQuery += addressChunks[0];
+    	for (int i = 1; i < addressChunks.length; i++) {
+    		addressQuery += "+";
+    		addressQuery += addressChunks[i];
+    	}
+    	addressQuery += "&key=API_KEY";
+    	
+    	try {
+			URL url = new URL(addressQuery);
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	((EditText) findViewById(R.id.enterAddress)).setText(addressQuery);
+    	
+    }
+    
+    public void clearPrompt(View v)
+    {
+    	EditText input = (EditText) findViewById(R.id.enterAddress);
+    	if(input.getText().toString().equals("Enter an Address"))
+    	{
+    		input.setText("");
+    	}
+    }
+}

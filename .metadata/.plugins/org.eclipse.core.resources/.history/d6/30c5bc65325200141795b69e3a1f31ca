@@ -1,0 +1,57 @@
+package smt.httpTest;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+
+import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+
+public class MainActivity extends ActionBarActivity {
+
+	private EditText value;
+	private Button btn;
+	private ProgressBar pb;
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		value=(EditText)findViewById(R.id.editText1);
+		btn=(Button)findViewById(R.id.button1);
+		pb=(ProgressBar)findViewById(R.id.progressBar1);
+		pb.setVisibility(View.GONE);
+		btn.setOnClickListener((OnClickListener) this);
+	}
+	
+	public void postData(String valueIWantToSend) {
+		HttpClient httpclient = new DefaultHttpClient();
+	        // specify the URL you want to post to
+		HttpPost httppost = new HttpPost("http://somewebsite.com/receiver.php");
+		try {
+			// create a list to store HTTP variables and their values
+			List nameValuePairs = new ArrayList();
+	                // add an HTTP variable and value pair
+			nameValuePairs.add(new BasicNameValuePair("myHttpData", valueIWantToSend));
+			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+	                // send the variable and value, in other words post, to the URL
+			HttpResponse response = httpclient.execute(httppost);
+		} catch (ClientProtocolException e) {
+			// process exception
+		} catch (IOException e) {
+			// process exception
+		}
+	}
+}
